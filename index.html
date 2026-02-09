@@ -1,767 +1,583 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Kurdish Master Notebook</title>
-    <!-- FontAwesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Behdinan Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ------------------- 1. SYSTEM & VARIABLES ------------------- */
         :root {
-            --gold: #d4af37;
-            --gold-dark: #b8860b;
-            --dark-overlay: rgba(0, 0, 0, 0.75);
-            --glass-bg: rgba(20, 20, 20, 0.85);
-            --text-color: #ffffff;
-            --bg-lantern: url('https://i.pinimg.com/736x/87/07/f3/8707f30089209581729222c09192931d.jpg'); /* Blue Lantern */
-            --bg-room: url('https://i.pinimg.com/originals/e8/34/07/e8340702de2922765870df73356e9275.jpg'); /* Sunlit Room */
+            --primary: #1e3c72; /* Royal Blue */
+            --secondary: #2a5298;
+            --accent: #FFD700; /* Gold */
+            --bg: #f4f7f6;
+            --glass: rgba(255, 255, 255, 0.95);
+            --text: #333;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, sans-serif;
+        }
+
         body {
-            background-color: #000;
-            color: var(--text-color);
-            overflow: hidden; 
+            background: linear-gradient(135deg, var(--primary) 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- Login Screen --- */
+        .login-wrapper {
+            width: 100%;
             height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: radial-gradient(circle at center, #2a5298 0%, #1e3c72 40%, #000 100%);
         }
 
-        /* ------------------- 2. BACKGROUND TRANSITION ------------------- */
-        #dynamic-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover; background-position: center;
-            transition: background-image 2s ease-in-out, filter 2s ease;
-            z-index: -2;
-        }
-        
-        /* Phase 1: Lantern (Dark) */
-        .bg-phase-1 {
-            background-image: var(--bg-lantern);
-            filter: brightness(0.6);
-        }
-
-        /* Phase 2: Room (Bright but dimmed for text) */
-        .bg-phase-2 {
-            background-image: var(--bg-room);
-            filter: brightness(0.4) blur(3px);
+        .login-card {
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            animation: cardEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        /* ------------------- 3. INTRO SCREEN ------------------- */
-        #intro-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.3);
-            cursor: pointer;
-        }
-        .lantern-glow {
-            width: 150px; height: 150px; border-radius: 50%;
-            box-shadow: 0 0 50px rgba(0, 150, 255, 0.5);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.5; transform: scale(0.9); } }
-        
-        .intro-text {
-            margin-top: 20px; color: #aaddff; font-size: 1.2em; text-align: center;
-            text-shadow: 0 0 10px #000; animation: fadeIn 3s;
+        .logo-circle {
+            width: 90px;
+            height: 90px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* ------------------- 4. MAIN APP LAYOUT ------------------- */
-        #main-app {
-            display: none;
-            height: 100vh;
-            overflow-y: auto;
+        .login-card h2 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .login-card p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
             position: relative;
-            padding-bottom: 70px;
-            animation: appFadeIn 2s ease;
+            margin-bottom: 20px;
         }
-        @keyframes appFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .container { width: 90%; max-width: 480px; margin: 20px auto; }
-        
-        .card {
-            background: var(--glass-bg);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
+            outline: none;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(30, 60, 114, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        .error-message {
+            color: #ff3333;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .developer {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        /* --- Dashboard --- */
+        .dashboard {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            min-height: 100vh;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
             border-radius: 15px;
-            padding: 20px; margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease;
         }
 
-        input, select, textarea {
-            width: 100%; padding: 12px; margin: 8px 0;
-            background: rgba(255,255,255,0.1); border: 1px solid #444;
-            color: white; border-radius: 8px; outline: none; text-align: right;
+        .student-info h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
         }
-        input:focus { border-color: var(--gold); }
-        
-        .btn {
-            width: 100%; padding: 12px; border: none; border-radius: 8px;
-            font-weight: bold; cursor: pointer; margin-top: 10px;
+        .student-info span {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: #ffebee;
+            color: #c62828;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        .logout-btn:hover { background: #ffcdd2; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            animation: fadeIn 1s ease;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: 0.4s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary);
             transition: 0.3s;
         }
-        .btn-gold { background: linear-gradient(45deg, var(--gold-dark), var(--gold)); color: #000; }
-        .btn-gold:active { transform: scale(0.98); }
-        .btn-red { background: #8b0000; color: white; }
 
-        /* ------------------- 5. AUTH SCREEN ------------------- */
-        #auth-container {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 400px;
+        .subject-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
-        .auth-switch { display: flex; border-bottom: 1px solid #444; margin-bottom: 20px; }
-        .switch-btn { flex: 1; padding: 10px; text-align: center; color: #888; cursor: pointer; }
-        .switch-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+        .subject-card:hover::before { height: 100%; opacity: 0.05; }
 
-        /* ------------------- 6. FOLDERS TAB ------------------- */
-        .folder-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .folder-title { color: var(--gold); font-size: 1.2em; font-weight: bold; }
-        .folder-score { background: rgba(212, 175, 55, 0.2); padding: 5px 10px; border-radius: 5px; color: var(--gold); }
-        
-        .grade-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        .icon-box {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
         }
-        .grade-actions i { margin-left: 10px; cursor: pointer; color: #aaa; }
-        .grade-actions i:hover { color: var(--gold); }
 
-        /* ------------------- 7. PROFILE (INSTA STYLE) ------------------- */
-        .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
-        .p-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); object-fit: cover; }
-        .p-stats { display: flex; gap: 15px; text-align: center; flex: 1; justify-content: space-around; }
-        .stat-num { font-weight: bold; font-size: 1.2em; display: block; }
-        .stat-label { font-size: 0.8em; color: #aaa; }
-        
-        .bio-section { margin-bottom: 15px; font-size: 0.9em; line-height: 1.5; }
-        .social-links { display: flex; gap: 10px; margin-bottom: 20px; }
-        .s-link { flex: 1; background: #333; padding: 8px; text-align: center; border-radius: 6px; text-decoration: none; color: white; font-size: 0.9em; }
-
-        /* Ranking */
-        .rank-card { background: linear-gradient(to right, rgba(20,20,20,0.9), rgba(50,50,50,0.5)); border-left: 3px solid var(--gold); padding: 10px; margin-bottom: 5px; display: flex; align-items: center; }
-        .rank-num { font-size: 1.5em; font-weight: bold; color: var(--gold); margin-left: 15px; width: 30px; }
-        .rank-user { font-weight: bold; }
-
-        /* ------------------- 8. CHAT SYSTEM ------------------- */
-        .chat-row { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #333; cursor: pointer; transition: 0.2s; }
-        .chat-row:hover { background: rgba(255,255,255,0.05); }
-        .c-avatar { width: 50px; height: 50px; border-radius: 50%; margin-left: 15px; object-fit: cover; }
-        
-        /* Chat Interface */
-        #chat-room {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 2000; display: none; flex-direction: column;
+        .subject-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
         }
-        .cr-header { padding: 10px 15px; background: #111; display: flex; align-items: center; border-bottom: 1px solid #333; }
-        .cr-body { flex: 1; overflow-y: auto; padding: 15px; background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); }
-        .cr-footer { padding: 10px; background: #111; display: flex; align-items: center; gap: 10px; }
 
-        /* Messages */
-        .msg { max-width: 80%; padding: 10px 15px; margin: 5px 0; border-radius: 15px; position: relative; word-wrap: break-word; font-size: 0.95em; }
-        .msg-me { background: var(--gold); color: black; margin-right: auto; border-radius: 15px 15px 15px 0; }
-        .msg-other { background: #333; color: white; margin-left: auto; border-radius: 15px 15px 0 15px; }
-
-        /* Edu Widgets */
-        .edu-widget { background: rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; padding: 8px; margin-top: 5px; }
-        .poll-bar { height: 8px; background: #555; border-radius: 4px; overflow: hidden; margin-top: 5px; }
-        .poll-fill { height: 100%; background: #000; width: 0%; transition: 0.5s; }
-        .quiz-opt { display: block; background: rgba(255,255,255,0.2); margin: 4px 0; padding: 6px; border-radius: 4px; cursor: pointer; text-align: center; }
-        .quiz-correct { background: #28a745 !important; color: white; }
-        .quiz-wrong { background: #dc3545 !important; color: white; }
-
-        /* Tools Menu */
-        #tools-menu {
-            position: absolute; bottom: 70px; right: 10px; width: 220px;
-            background: #222; border: 1px solid var(--gold); border-radius: 10px;
-            display: none; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        /* --- Modal for Grades --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
         }
-        .tool-item { padding: 12px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .tool-item i { width: 25px; text-align: center; color: var(--gold); }
 
-        /* ------------------- 9. NAVBAR ------------------- */
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
-            background: #0a0a0a; border-top: 1px solid #333;
-            display: flex; justify-content: space-around; align-items: center; z-index: 500;
-        }
-        .nav-item { color: #666; font-size: 1.4em; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--gold); transform: translateY(-5px); }
-        .nav-pic { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #666; object-fit: cover; }
-        .nav-item.active .nav-pic { border-color: var(--gold); }
-
-        /* ------------------- 10. MODALS ------------------- */
         .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 3000;
-            display: none; justify-content: center; align-items: center;
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
-        .modal-box { background: #1a1a1a; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid var(--gold); }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .modal-title {
+            color: var(--primary);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .grade-table th {
+            text-align: left;
+            color: #666;
+            font-size: 0.9rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .grade-table td {
+            padding: 15px 0;
+            border-bottom: 1px solid #f9f9f9;
+            color: #333;
+            font-weight: 600;
+        }
+        .score-val { color: var(--primary); font-weight: 800; }
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Animations */
+        @keyframes cardEntrance { from { opacity: 0; transform: scale(0.9) translateY(30px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); } 20%, 40%, 60%, 80% { transform: translateX(5px); } }
+
     </style>
 </head>
 <body>
 
-    <!-- LAYERS -->
-    <div id="dynamic-bg" class="bg-phase-1"></div>
+    <!-- Login Page -->
+    <div class="login-wrapper" id="loginSection">
+        <div class="login-card">
+            <div class="logo-circle">B</div>
+            <h2>Behdinan Institute</h2>
+            <p>Technical & Vocational Institute</p>
 
-    <!-- INTRO -->
-    <div id="intro-screen" onclick="startApp()">
-        <div class="lantern-glow"></div>
-        <p class="intro-text">فانوسێ هەلکە (Click)</p>
-    </div>
-
-    <!-- MAIN APP -->
-    <div id="main-app">
-
-        <!-- AUTH (Login/Signup) FIXED -->
-        <div id="auth-view" class="container" style="display:none;">
-            <div class="card" id="auth-container">
-                <h2 style="text-align:center; color:var(--gold); margin-bottom:20px; font-family:'Times New Roman', serif; letter-spacing:1px;">Kurdish Master</h2>
-                
-                <div class="auth-switch">
-                    <div class="switch-btn active" onclick="toggleAuth('login', this)">چوونە ژوور</div>
-                    <div class="switch-btn" onclick="toggleAuth('signup', this)">تۆمارکرن</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="form-control" id="username" placeholder="Username" autocomplete="off">
                 </div>
-
-                <!-- Login Form -->
-                <div id="form-login">
-                    <input type="text" id="l-user" placeholder="ناڤێ بەکارهێنەری">
-                    <input type="password" id="l-pass" placeholder="پاسوورد">
-                    <button class="btn btn-gold" onclick="login()">چوونە ژوور</button>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="form-control" id="password" placeholder="Password">
                 </div>
-
-                <!-- Signup Form (FIXED) -->
-                <div id="form-signup" style="display:none;">
-                    <input type="text" id="s-user" placeholder="ناڤێ بەکارهێنەری (نوی)">
-                    <input type="password" id="s-pass" placeholder="پاسوورد">
-                    <input type="password" id="s-pass2" placeholder="دووبارە بنڤیسە">
-                    <button class="btn btn-gold" onclick="signup()">تۆمارکرن</button>
-                </div>
+                <div class="error-message" id="errorMsg">Username or Password incorrect!</div>
+                <button type="submit" class="btn-submit">Login System</button>
+            </form>
+            
+            <div class="developer">
+                Developed by <strong>Rahand Nazi</strong>
             </div>
-        </div>
-
-        <!-- APP CONTENT -->
-        <div id="app-content" style="display:none;">
-
-            <!-- FOLDERS TAB -->
-            <div id="tab-folders" class="container">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <h2>فۆڵدەرێن من</h2>
-                    <button onclick="addFolder()" style="background:var(--gold); border:none; width:40px; height:40px; border-radius:50%; font-size:1.5em; font-weight:bold;">+</button>
-                </div>
-                <div id="folders-list"></div>
-            </div>
-
-            <!-- PROFILE TAB -->
-            <div id="tab-profile" class="container" style="display:none;">
-                <div class="card">
-                    <div class="profile-header">
-                        <img id="p-img-disp" src="" class="p-img">
-                        <div class="p-stats">
-                            <div><span class="stat-num" id="stat-sub">0</span>Subjects</div>
-                            <div><span class="stat-num" id="stat-pts">0</span>Points</div>
-                            <div><span class="stat-num" id="stat-fr">0</span>Friends</div>
-                        </div>
-                    </div>
-                    <div class="bio-section">
-                        <div id="p-name-disp" style="font-weight:bold; font-size:1.1em; color:white;">User</div>
-                        <div id="p-bio-disp" style="color:#ccc;">Bio...</div>
-                        <div id="p-id-disp" style="color:var(--gold); font-family:monospace; margin-top:5px; font-size:0.85em;">ID: ...</div>
-                    </div>
-                    <div class="social-links">
-                        <a id="link-insta" href="#" target="_blank" class="s-link"><i class="fab fa-instagram"></i> Instagram</a>
-                        <a id="link-snap" href="#" target="_blank" class="s-link"><i class="fab fa-snapchat"></i> Snapchat</a>
-                    </div>
-                    <button class="btn btn-gold" style="background:#222; border:1px solid #555; color:white; margin-top:0;" onclick="openEditProfile()">Edit Profile</button>
-                    <button class="btn btn-red" style="margin-top:10px;" onclick="logout()">دەرکەڤتن (Logout)</button>
-                </div>
-                <h3 style="color:var(--gold); margin:20px 0 10px 0;">ریزبەندیا قوتابیان (Top Students)</h3>
-                <div id="ranking-list"></div>
-            </div>
-
-            <!-- CHAT TAB -->
-            <div id="tab-chat" class="container" style="display:none;">
-                <h2 style="margin-bottom:15px;">نامە و گروپ</h2>
-                <div id="chat-conversations"></div>
-            </div>
-
-            <!-- SEARCH TAB -->
-            <div id="tab-search" class="container" style="display:none;">
-                <h2>لێگەڕیان (Search)</h2>
-                <div class="card">
-                    <input type="text" id="search-input" placeholder="ID بنڤیسە (std_...)">
-                    <button class="btn btn-gold" onclick="searchAndAdd()">Add Friend</button>
-                </div>
-                <div id="friends-list" style="margin-top:20px;"></div>
-            </div>
-
-        </div>
-
-        <!-- NAV BAR -->
-        <div class="nav-bar" id="navbar" style="display:none;">
-            <div class="nav-item active" onclick="switchTab('folders', this)"><i class="fas fa-folder"></i></div>
-            <div class="nav-item" onclick="switchTab('search', this)"><i class="fas fa-search"></i></div>
-            <div class="nav-item" onclick="switchTab('chat', this)"><i class="fas fa-comment"></i></div>
-            <div class="nav-item" onclick="switchTab('profile', this)"><img id="nav-mini-pic" src="" class="nav-pic"></div>
         </div>
     </div>
 
-
-    <!-- MODALS -->
-    <!-- GRADE MODAL -->
-    <div id="modal-grade" class="modal">
-        <div class="modal-box">
-            <h3 id="gm-title" style="color:var(--gold); text-align:center; margin-bottom:15px;">Quiz Info</h3>
-            <input type="hidden" id="gm-fidx">
-            <input type="hidden" id="gm-gidx">
-            <input type="text" id="gm-name" placeholder="ناڤێ کویزێ">
-            <div style="display:flex; gap:10px;">
-                <input type="number" id="gm-max" placeholder="نمرە (Max)">
-                <input type="number" id="gm-score" placeholder="تە چەند ئینا">
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboardSection">
+        <div class="header">
+            <div class="student-info">
+                <h1 id="welcomeName">Student Name</h1>
+                <span id="welcomeUser">ID: ---</span>
             </div>
-            <button class="btn btn-gold" onclick="saveGrade()">Save</button>
-            <button class="btn btn-red" id="gm-del-btn" style="display:none;" onclick="deleteGrade()">Delete Quiz</button>
-            <button class="btn" style="background:transparent; color:#888; border:1px solid #444;" onclick="closeModal('modal-grade')">Cancel</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="grid-container">
+            <div class="subject-card" onclick="showGrades('fundamental')">
+                <div class="icon-box"><i class="fas fa-heartbeat"></i></div>
+                <div class="subject-name">Fundamental of Nursing</div>
+            </div>
+            <div class="subject-card" onclick="showGrades('anatomy')">
+                <div class="icon-box"><i class="fas fa-bone"></i></div>
+                <div class="subject-name">Human Anatomy</div>
+            </div>
+            <div class="subject-card" onclick="showGrades('kurdology')">
+                <div class="icon-box"><i class="fas fa-book-open"></i></div>
+                <div class="subject-name">Kurdology</div>
+            </div>
+            <div class="subject-card" onclick="showGrades('computer')">
+                <div class="icon-box"><i class="fas fa-laptop-code"></i></div>
+                <div class="subject-name">Computer Skills</div>
+            </div>
+            <div class="subject-card" onclick="showGrades('english')">
+                <div class="icon-box"><i class="fas fa-language"></i></div>
+                <div class="subject-name">English Language</div>
+            </div>
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
-    <div id="modal-profile" class="modal">
-        <div class="modal-box" style="max-height:80vh; overflow-y:auto;">
-            <h3 style="color:var(--gold); text-align:center;">Edit Profile</h3>
-            <label style="color:#aaa; font-size:0.8em; display:block; margin-top:10px;">وێنێ پڕۆفایلی</label>
-            <input type="file" id="ep-file" onchange="handleProfilePic(this)">
-            <input type="text" id="ep-name" placeholder="ناڤ">
-            <textarea id="ep-bio" placeholder="Bio (کورتە باس)" rows="3"></textarea>
-            <input type="text" id="ep-insta" placeholder="Instagram Link">
-            <input type="text" id="ep-snap" placeholder="Snapchat Link">
-            <input type="text" id="ep-phone" placeholder="Phone Number">
-            <button class="btn btn-gold" onclick="saveProfileChanges()">Update</button>
-            <button class="btn" style="background:transparent; color:#888;" onclick="closeModal('modal-profile')">Close</button>
+    <!-- Grades Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title" id="modalTitle">Subject Name</h2>
+            <div id="modalContent">
+                <!-- Content injected via JS -->
+            </div>
         </div>
-    </div>
-
-    <!-- CHAT ROOM -->
-    <div id="chat-room">
-        <div class="cr-header">
-            <i class="fas fa-arrow-right" style="color:white; font-size:1.2em; cursor:pointer;" onclick="closeChat()"></i>
-            <img id="cr-img" src="" class="c-avatar" style="width:35px; height:35px; margin-left:10px; margin-right:10px;">
-            <span id="cr-name" style="font-weight:bold; color:var(--gold);">User</span>
-        </div>
-        
-        <div id="cr-msgs" class="cr-body"></div>
-        
-        <div id="tools-menu">
-            <div class="tool-item" onclick="sendTool('photo')"><i class="fas fa-image"></i> وێنە / ڤیدیۆ</div>
-            <div class="tool-item" onclick="sendTool('poll')"><i class="fas fa-poll"></i> ڕاپرسی (Poll)</div>
-            <div class="tool-item" onclick="sendTool('tf')"><i class="fas fa-check-circle"></i> ڕاست / خەلەت</div>
-            <div class="tool-item" onclick="sendTool('mcq')"><i class="fas fa-list-ul"></i> هەلبژارتن (MCQ)</div>
-            <div class="tool-item" onclick="sendTool('fib')"><i class="fas fa-pencil-alt"></i> پرسیارا ڤالاهی</div>
-        </div>
-
-        <div class="cr-footer">
-            <i class="fas fa-plus-circle" style="color:var(--gold); font-size:1.5em; cursor:pointer;" onclick="toggleTools()"></i>
-            <input type="text" id="msg-in" placeholder="نامە..." style="margin:0; border-radius:20px; padding-right:15px;">
-            <i class="fas fa-paper-plane" style="color:var(--gold); font-size:1.3em; cursor:pointer;" onclick="sendText()"></i>
-        </div>
-        <input type="file" id="chat-file-input" hidden onchange="processFileSend()">
     </div>
 
     <script>
-        /* ---------------- DATA ---------------- */
-        let users = JSON.parse(localStorage.getItem('km_users')) || [];
-        let chats = JSON.parse(localStorage.getItem('km_chats')) || {}; 
+        // --- DATABASE: 59 Students ---
+        // Logic: 
+        // 1-3: Original Cards.
+        // 4: Manual (Iman Mahmood).
+        // 5-59: Card N-1 (Shifted).
+        // f: [Quiz_T(5), Quiz_P(5), Mid_T(12), Mid_P(13)]
+        // k: Kurdology (25)
+        
+        const db = [
+            { u: "benu2501", p: "nNGPT9UK", n: "Isra Salim", f: [5, 3, 10, 11.5], k: 25 },
+            { u: "benu2502", p: "6UMfurep", n: "Ayad Hussien", f: [0, 2, 2.5, 9], k: 15 },
+            { u: "benu2503", p: "bJbht2zx", n: "Iman Salim", f: [2, 4, 7.5, 8], k: 13 },
+            // SPECIAL CASE: Iman Mahmood (Row 4)
+            { u: "benu2559", p: "TJVF7UEr", n: "Iman Mahmood", f: [2, 4, 9.5, 10], k: 15 },
+            
+            // Shifted Sequence starts here (Row 5 uses Card 4)
+            { u: "benu2504", p: "p6wDsuqm", n: "Aye Khalil", f: [3, 2, 8.5, 9.5], k: 21 },
+            { u: "benu2505", p: "TW766w8H", n: "Ayad Ali", f: [0, 3, 5, 5], k: 7 },
+            { u: "benu2506", p: "3eKBDfjP", n: "Iman Ramadan", f: [4, 4, 8.5, 12.5], k: 23 },
+            { u: "benu2507", p: "vvGBa5qb", n: "Bina Saeed", f: [0, 3, 7.5, 6], k: 22 },
+            { u: "benu2508", p: "cPB4w8s4", n: "Parween Mohammed", f: [0, 0, 0, 0], k: 0 },
+            { u: "benu2509", p: "bLxPg8Nh", n: "Jowan Khalid", f: [0, 3, 5, 8.5], k: 14 },
+            { u: "benu2510", p: "s6L8mqZL", n: "Cheeman Mohammed", f: [2, 3, 3.5, 9], k: 22 },
+            { u: "benu2511", p: "uxRjf8fQ", n: "Halima Salah", f: [0, 2, 8.5, 6], k: 18 },
+            { u: "benu2512", p: "eXtm7Ewy", n: "Doaa Issa", f: [0, 2, 7.5, 9], k: 15 },
+            { u: "benu2513", p: "72LmZyC4", n: "Dilbreen Fars", f: [5, 2, 8, 11], k: 19 },
+            { u: "benu2514", p: "afdKS8re", n: "Dilgash Samir", f: [5, 5, 10.5, 11.5], k: 25 },
+            { u: "benu2515", p: "75F94tDq", n: "Doaa Walid", f: [0, 2, 7.5, 8.5], k: 16 },
+            { u: "benu2516", p: "4MSsvCCL", n: "Ramziya Ali", f: [2, 3, 7.5, 8], k: 22 },
+            { u: "benu2517", p: "YFUA3a8q", n: "Randa Dlo", f: [2, 2, 7.5, 11], k: 21 },
+            { u: "benu2518", p: "N9HMfrsp", n: "Rahand Nazi", f: [0, 3, 7, 9.5], k: 21 },
+            { u: "benu2519", p: "pfm3apFs", n: "Zina Shabaan", f: [0, 2, 8, 6.5], k: 17 },
+            { u: "benu2520", p: "rRC5vVBR", n: "Zaynab Hikmat", f: [0, 3, 6.5, 9.5], k: 14 },
+            { u: "benu2521", p: "SavL9FEH", n: "Zaynab Emad", f: [0, 2, 4.5, 4.5], k: 9 },
+            { u: "benu2522", p: "jHNWa2cD", n: "Jiyan Shaaban", f: [3, 4, 5, 9], k: 16 },
+            { u: "benu2523", p: "frjdy2QG", n: "Jina Hajji", f: [0, 4, 6.5, 8], k: 13 },
+            { u: "benu2524", p: "cXPMdxd4", n: "Sara Moslih", f: [0, 0, 0, 0], k: 0 },
+            { u: "benu2525", p: "xXPDWTE4", n: "Salar Sagvan", f: [0, 2, 3, 6.5], k: 15 },
+            { u: "benu2526", p: "YusxbH6S", n: "Saman Islam", f: [0, 0, 7.5, 7], k: 15 },
+            { u: "benu2527", p: "mp7WXkLY", n: "Sami Khalaf", f: [2, 2, 9, 9.5], k: 23 },
+            { u: "benu2528", p: "Jzxrk3fh", n: "Saad Ahmed", f: [0, 1, 5.5, 7], k: 8 },
+            { u: "benu2529", p: "Cfbye2NS", n: "Salim Marwan", f: [2, 4, 4, 8], k: 14 },
+            { u: "benu2530", p: "kedm7gKz", n: "Samiya Morad", f: [0, 4, 7.5, 8], k: 23 },
+            { u: "benu2531", p: "cNyYD42M", n: "Sipal Dawd", f: [0, 0, 0, 0], k: 0 },
+            { u: "benu2532", p: "V3psDhs4", n: "Sidra Mohammed", f: [3, 2, 5.5, 8], k: 25 },
+            { u: "benu2533", p: "cKP6HAtt", n: "Sidra Younis", f: [3, 2, 5, 10], k: 16 },
+            { u: "benu2534", p: "R7yPad4V", n: "Shanaz Mohammed", f: [0, 3, 6.5, 6.5], k: 13 },
+            { u: "benu2535", p: "MqZM9VRc", n: "Shani Khalaf", f: [0, 2, 5.5, 8.5], k: 19 },
+            { u: "benu2536", p: "G3CuTUnr", n: "Shireen Darwish", f: [0, 0, 0, 6], k: 0 },
+            { u: "benu2537", p: "tHuSqyb9", n: "Ali Hussien", f: [0, 3, 4, 6], k: 12 },
+            { u: "benu2538", p: "38TWj7n6", n: "Mokhtar Hussien", f: [0, 0, 0, 0], k: 0 },
+            { u: "benu2539", p: "Azsvst5j", n: "Maram Zidan", f: [2, 0, 0, 0], k: 9 },
+            { u: "benu2540", p: "LrJx7Gak", n: "Mahnaz Idress", f: [0, 2, 7, 7], k: 19 },
+            { u: "benu2541", p: "UuV8bWpd", n: "Mona Ayoub", f: [2, 4, 8.5, 11], k: 25 },
+            { u: "benu2542", p: "q6v4cLrj", n: "Mideya Zaki", f: [2, 2, 8, 11], k: 15 },
+            { u: "benu2543", p: "R7we5kze", n: "Mina Qassim", f: [4, 3, 4.5, 9], k: 23 },
+            { u: "benu2544", p: "P3E5Aewh", n: "Nasir Khazir", f: [0, 2, 1.5, 4.5], k: 16 },
+            { u: "benu2545", p: "G99q67ZU", n: "Nada Yousif", f: [0, 1, 7, 9], k: 21 },
+            { u: "benu2546", p: "VLgBV8y2", n: "Najbeer Masood", f: [0, 0, 0, 0], k: 0 },
+            { u: "benu2547", p: "x2JZT68z", n: "Haroon Rashid", f: [1, 3, 4.5, 5.5], k: 11 },
+            { u: "benu2548", p: "grM4hQqj", n: "Hays Farhan", f: [0, 4, 9, 10], k: 17 },
+            { u: "benu2549", p: "ycGfBu55", n: "Hezhin Sharif", f: [0, 3, 6, 8], k: 13 },
+            { u: "benu2550", p: "8tghU622", n: "Hadar Zbir", f: [5, 2, 9, 11], k: 20 },
+            { u: "benu2551", p: "WUN5zzSh", n: "Waad Shakir", f: [0, 2, 0, 0], k: 6 },
+            { u: "benu2552", p: "AnxcU7rn", n: "Walaa Ahmed", f: [5, 3, 11, 8], k: 25 },
+            { u: "benu2553", p: "kfzJwH8A", n: "Yasir Khorshid", f: [5, 3, 10, 9.5], k: 22 },
+            { u: "benu2554", p: "5bE2jLHH", n: "Yousra Mohammed", f: [0, 3, 5, 10.5], k: 25 },
+            { u: "benu2555", p: "U7UJpq8J", n: "Aram Mahmood", f: [0, 0, 0, 5], k: 12 },
+            { u: "benu2556", p: "hJ9Ehur5", n: "Tafin Nazir", f: [2, 3, 6.5, 7.5], k: 22 },
+            { u: "benu2557", p: "GWsRcmA7", n: "Aveen Shawkat", f: [0, 0, 0, 0], k: 0 },
+            { u: "benu2558", p: "YArtcNE3", n: "Elaf Mikaeel", f: [0, 0, 5.5, 7], k: 8 }
+        ];
+
         let currentUser = null;
-        let activeChatID = null;
 
-        /* ---------------- LOGIC ---------------- */
-        function startApp() {
-            const bg = document.getElementById('dynamic-bg');
-            bg.classList.remove('bg-phase-1');
-            bg.classList.add('bg-phase-2');
-            document.getElementById('intro-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const card = document.querySelector('.login-card');
 
-            const sess = localStorage.getItem('km_session');
-            if(sess) {
-                currentUser = JSON.parse(sess);
-                const fresh = users.find(u => u.id === currentUser.id);
-                if(fresh) currentUser = fresh;
-                showAppContent();
+            // Find user
+            const found = db.find(s => s.u === user && s.p === pass);
+
+            if(found) {
+                currentUser = found;
+                errorMsg.style.display = 'none';
+                
+                // Animation transition
+                document.getElementById('loginSection').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('dashboardSection').style.display = 'block';
+                    document.getElementById('welcomeName').innerText = "Hi, " + found.n;
+                    document.getElementById('welcomeUser').innerText = "Username: " + found.u;
+                }, 500);
             } else {
-                document.getElementById('auth-view').style.display = 'block';
+                errorMsg.style.display = 'block';
+                card.style.animation = 'none';
+                card.offsetHeight; /* trigger reflow */
+                card.style.animation = 'shake 0.5s';
             }
-        }
-
-        /* --- AUTH FIXED (Signup Repair) --- */
-        function toggleAuth(type, btn) {
-            document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('form-login').style.display = type==='login'?'block':'none';
-            document.getElementById('form-signup').style.display = type==='signup'?'block':'none';
-        }
-
-        function signup() {
-            // Updated Selection Logic
-            const u = document.getElementById('s-user').value.trim();
-            const p1 = document.getElementById('s-pass').value;
-            const p2 = document.getElementById('s-pass2').value;
-
-            if(!u || !p1 || !p2) return alert("هیڤیە هەمی زانیاریا پڕ بکە");
-            if(p1 !== p2) return alert("پاسوورد وەک یەک نینن");
-            
-            // Check if user exists
-            if(users.some(x => x.username === u)) return alert("ئەڤ ناڤە یێ هەی، ناڤەکێ دی هەلبژێرە");
-
-            const newUser = {
-                id: 'std_' + Date.now(),
-                username: u, password: p1,
-                photo: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-                bio: 'Student at Kurdish Master',
-                insta: '', snap: '', phone: '',
-                folders: [], friends: []
-            };
-            
-            users.push(newUser);
-            saveData();
-            loginSuccess(newUser);
-        }
-
-        function login() {
-            const u = document.getElementById('l-user').value.trim();
-            const p = document.getElementById('l-pass').value;
-            const found = users.find(x => x.username === u && x.password === p);
-            
-            if(found) loginSuccess(found);
-            else alert("ناڤ یان پاسوورد خەلەتە");
-        }
-
-        function loginSuccess(user) {
-            currentUser = user;
-            localStorage.setItem('km_session', JSON.stringify(user));
-            document.getElementById('auth-view').style.display = 'none';
-            showAppContent();
-        }
+        });
 
         function logout() {
-            localStorage.removeItem('km_session');
             location.reload();
         }
 
-        function saveData() {
-            if(currentUser) {
-                const idx = users.findIndex(u => u.id === currentUser.id);
-                if(idx !== -1) users[idx] = currentUser;
-            }
-            localStorage.setItem('km_users', JSON.stringify(users));
-            localStorage.setItem('km_chats', JSON.stringify(chats));
-        }
+        function showGrades(subject) {
+            const modal = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            const title = document.getElementById('modalTitle');
+            
+            modal.style.display = 'flex';
 
-        function showAppContent() {
-            document.getElementById('app-content').style.display = 'block';
-            document.getElementById('navbar').style.display = 'flex';
-            refreshAll();
-        }
-
-        function refreshAll() {
-            renderFolders();
-            renderProfile();
-            renderRanking();
-            renderChatList();
-            renderFriends();
-        }
-
-        /* --- TABS --- */
-        function switchTab(tabName, navBtn) {
-            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
-            document.getElementById('tab-' + tabName).style.display = 'block';
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            navBtn.classList.add('active');
-            if(tabName === 'profile') renderRanking();
-            if(tabName === 'chat') renderChatList();
-        }
-
-        /* --- FOLDERS --- */
-        function addFolder() {
-            const name = prompt("ناڤێ بابەتی (Subject Name):");
-            if(name) { currentUser.folders.push({ name: name, grades: [] }); saveData(); renderFolders(); }
-        }
-
-        function renderFolders() {
-            const list = document.getElementById('folders-list');
-            list.innerHTML = '';
-            currentUser.folders.forEach((folder, fIdx) => {
-                let totalScore = 0, totalMax = 0;
-                folder.grades.forEach(g => { totalScore += parseFloat(g.score)||0; totalMax += parseFloat(g.max)||0; });
+            if(subject === 'fundamental') {
+                title.innerText = "Fundamental of Nursing Results";
                 
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-                    <div class="folder-head">
-                        <span class="folder-title">${folder.name}</span>
-                        <span class="folder-score">${totalScore} / ${totalMax}</span>
+                // Grades from DB
+                const g = currentUser.f;
+                const total = g[0] + g[1] + g[2] + g[3];
+                
+                let html = `
+                    <table class="grade-table">
+                        <tr>
+                            <th>Exam / Activity</th>
+                            <th>Full Mark</th>
+                            <th>Your Score</th>
+                        </tr>
+                        <tr>
+                            <td>Quiz (Theory)</td>
+                            <td>5%</td>
+                            <td class="score-val">${g[0]}</td>
+                        </tr>
+                        <tr>
+                            <td>Quiz (Practice)</td>
+                            <td>5%</td>
+                            <td class="score-val">${g[1]}</td>
+                        </tr>
+                        <tr>
+                            <td>Midterm (Theory)</td>
+                            <td>12%</td>
+                            <td class="score-val">${g[2]}</td>
+                        </tr>
+                        <tr>
+                            <td>Midterm (Practice)</td>
+                            <td>13%</td>
+                            <td class="score-val">${g[3]}</td>
+                        </tr>
+                        <tr style="background:#f0f8ff;">
+                            <td><strong>Total Collected</strong></td>
+                            <td><strong>35%</strong></td>
+                            <td class="score-val" style="color:#1e3c72; font-size:1.1rem;">${total}</td>
+                        </tr>
+                    </table>
+                `;
+                content.innerHTML = html;
+            } else if (subject === 'kurdology') {
+                title.innerText = "Kurdology Results";
+                content.innerHTML = `
+                    <div style="text-align:center; padding:20px;">
+                        <p style="color:#666; margin-bottom:10px;">Midterm Exam</p>
+                        <div style="font-size:3.5rem; font-weight:bold; color:var(--primary);">${currentUser.k} <span style="font-size:1rem; color:#999;">/ 25</span></div>
                     </div>
-                    <div style="font-size:0.8em; color:#888; margin-bottom:10px; cursor:pointer;" onclick="openGradeModal(${fIdx})"><i class="fas fa-plus"></i> زێدەکرنا کویزێ</div>
-                    <div>${folder.grades.map((g, gIdx) => `
-                        <div class="grade-item">
-                            <span>${g.name}</span>
-                            <span style="color:var(--gold); font-weight:bold; dir:ltr;">${g.score}/${g.max}</span>
-                            <span class="grade-actions"><i class="fas fa-edit" onclick="openGradeModal(${fIdx}, ${gIdx})"></i></span>
-                        </div>`).join('')}
-                    </div>`;
-                list.appendChild(div);
-            });
-        }
-
-        function openGradeModal(fIdx, gIdx = -1) {
-            document.getElementById('modal-grade').style.display = 'flex';
-            document.getElementById('gm-fidx').value = fIdx;
-            document.getElementById('gm-gidx').value = gIdx;
-            const delBtn = document.getElementById('gm-del-btn');
-            
-            if(gIdx > -1) {
-                const g = currentUser.folders[fIdx].grades[gIdx];
-                document.getElementById('gm-name').value = g.name;
-                document.getElementById('gm-max').value = g.max;
-                document.getElementById('gm-score').value = g.score;
-                document.getElementById('gm-title').innerText = "دەستکاری (Edit)";
-                delBtn.style.display = 'inline-block';
+                `;
             } else {
-                document.getElementById('gm-name').value = '';
-                document.getElementById('gm-max').value = '';
-                document.getElementById('gm-score').value = '';
-                document.getElementById('gm-title').innerText = "زێدەکرن (Add)";
-                delBtn.style.display = 'none';
+                // Empty for others
+                let subName = "";
+                if(subject === 'anatomy') subName = "Human Anatomy";
+                if(subject === 'computer') subName = "Computer Skills";
+                if(subject === 'english') subName = "English Language";
+
+                title.innerText = subName;
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list" style="font-size:3rem; color:#ddd; margin-bottom:15px;"></i>
+                        <p>No grades uploaded for this subject yet.</p>
+                        <p>هیچ نمرەک نەهاتیە دانان بو ڤی بابەتی.</p>
+                    </div>
+                `;
             }
         }
 
-        function saveGrade() {
-            const fIdx = document.getElementById('gm-fidx').value;
-            const gIdx = document.getElementById('gm-gidx').value;
-            const name = document.getElementById('gm-name').value;
-            const max = document.getElementById('gm-max').value;
-            const score = document.getElementById('gm-score').value;
-            if(!name || !max || !score) return alert("زانیاریا پڕ بکە");
-            
-            if(gIdx > -1) currentUser.folders[fIdx].grades[gIdx] = { name, max, score };
-            else currentUser.folders[fIdx].grades.push({ name, max, score });
-            saveData(); renderFolders(); closeModal('modal-grade');
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
         }
 
-        function deleteGrade() {
-            if(confirm("دڵنیای دێ رەش کەی؟")) {
-                const fIdx = document.getElementById('gm-fidx').value;
-                const gIdx = document.getElementById('gm-gidx').value;
-                currentUser.folders[fIdx].grades.splice(gIdx, 1);
-                saveData(); renderFolders(); closeModal('modal-grade');
+        // Close modal if clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('modalOverlay')) {
+                closeModal();
             }
         }
-
-        /* --- PROFILE --- */
-        function renderProfile() {
-            const u = currentUser;
-            document.getElementById('p-img-disp').src = u.photo;
-            document.getElementById('nav-mini-pic').src = u.photo;
-            document.getElementById('p-name-disp').innerText = u.username;
-            document.getElementById('p-bio-disp').innerText = u.bio;
-            document.getElementById('p-id-disp').innerText = "ID: " + u.id;
-            document.getElementById('stat-sub').innerText = u.folders.length;
-            document.getElementById('stat-fr').innerText = u.friends.length;
-            document.getElementById('link-insta').href = u.insta || '#';
-            document.getElementById('link-snap').href = u.snap || '#';
-            let points = 0;
-            u.folders.forEach(f => f.grades.forEach(g => points += parseFloat(g.score) || 0));
-            document.getElementById('stat-pts').innerText = points;
-        }
-
-        function openEditProfile() {
-            document.getElementById('modal-profile').style.display = 'flex';
-            document.getElementById('ep-name').value = currentUser.username;
-            document.getElementById('ep-bio').value = currentUser.bio;
-            document.getElementById('ep-insta').value = currentUser.insta;
-            document.getElementById('ep-snap').value = currentUser.snap;
-            document.getElementById('ep-phone').value = currentUser.phone;
-        }
-
-        function handleProfilePic(input) {
-            if(input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => currentUser.photo = e.target.result;
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function saveProfileChanges() {
-            currentUser.username = document.getElementById('ep-name').value;
-            currentUser.bio = document.getElementById('ep-bio').value;
-            currentUser.insta = document.getElementById('ep-insta').value;
-            currentUser.snap = document.getElementById('ep-snap').value;
-            currentUser.phone = document.getElementById('ep-phone').value;
-            saveData(); renderProfile(); closeModal('modal-profile');
-        }
-
-        function renderRanking() {
-            // FILTER: Only show users who are in my friends list OR myself
-            let myCircle = users.filter(u => currentUser.friends.includes(u.id) || u.id === currentUser.id);
-
-            let rankedUsers = myCircle.map(u => {
-                let total = 0;
-                if(u.folders) u.folders.forEach(f => f.grades.forEach(g => total += parseFloat(g.score)||0));
-                return { name: u.username, score: total, id: u.id };
-            }).sort((a, b) => b.score - a.score).slice(0, 5);
-
-            const list = document.getElementById('ranking-list');
-            list.innerHTML = '';
-            rankedUsers.forEach((u, i) => {
-                list.innerHTML += `
-                    <div class="rank-card">
-                        <span class="rank-num">${i+1}</span>
-                        <div style="flex:1;">
-                            <div class="rank-user">${u.name}</div>
-                            <div style="font-size:0.8em; color:#aaa;">${u.score} Points</div>
-                        </div>
-                        ${u.id === currentUser.id ? '<i class="fas fa-star" style="color:var(--gold)"></i>' : ''}
-                    </div>`;
-            });
-        }
-
-        /* --- CHAT & FRIENDS --- */
-        function searchAndAdd() {
-            const input = document.getElementById('search-input').value.trim();
-            if(input === currentUser.id) return alert("نەشێی خۆ زێدە کەی");
-            const target = users.find(u => u.id === input);
-            if(target) {
-                if(!currentUser.friends.includes(target.id)) {
-                    currentUser.friends.push(target.id);
-                    saveData(); renderFriends(); renderChatList();
-                    alert(target.username + " هاتە زێدەکرن");
-                } else alert("ئەڤ هەفالە یێ هەی");
-            } else alert("ID خەلەتە");
-        }
-
-        function renderFriends() {
-            const div = document.getElementById('friends-list');
-            div.innerHTML = '';
-            currentUser.friends.forEach(fid => {
-                const f = users.find(u => u.id === fid);
-                if(f) div.innerHTML += `<div class="card" style="padding:10px; display:flex; align-items:center;">
-                        <img src="${f.photo}" style="width:40px; height:40px; border-radius:50%; margin-left:10px;">
-                        <span>${f.username}</span></div>`;
-            });
-        }
-
-        function renderChatList() {
-            const div = document.getElementById('chat-conversations');
-            div.innerHTML = '';
-            currentUser.friends.forEach(fid => {
-                const f = users.find(u => u.id === fid);
-                if(f) div.innerHTML += `<div class="chat-row" onclick="openChat('${f.id}', '${f.username}', '${f.photo}')">
-                            <img src="${f.photo}" class="c-avatar">
-                            <div style="margin-right:15px; font-weight:bold;">${f.username}</div>
-                        </div>`;
-            });
-        }
-
-        function openChat(pid, pname, pimg) {
-            activeChatID = [currentUser.id, pid].sort().join('_');
-            document.getElementById('chat-room').style.display = 'flex';
-            document.getElementById('cr-name').innerText = pname;
-            document.getElementById('cr-img').src = pimg;
-            renderMessages();
-        }
-        function closeChat() { document.getElementById('chat-room').style.display = 'none'; activeChatID = null; }
-
-        function renderMessages() {
-            if(!activeChatID) return;
-            const msgs = chats[activeChatID] || [];
-            const container = document.getElementById('cr-msgs');
-            container.innerHTML = '';
-            msgs.forEach(m => {
-                let content = '';
-                // Handle different message types specifically
-                if(m.type === 'text') {
-                    content = m.text;
-                } 
-                else if(m.type === 'photo') {
-                    content = `<img src="${m.text}" style="max-width:100%; border-radius:10px;">`;
-                }
-                else if(m.type === 'poll') {
-                    content = `
-                        <div class="edu-widget">
-                            <strong>📊 ${m.data.q}</strong>
-                            <div class="poll-bar"><div class="poll-fill" style="width:50%; background:var(--gold);"></div></div>
-                        </div>`;
-                }
-                else if(m.type === 'mcq') {
-                    content = `
-                        <div class="edu-widget">
-                            <strong>❓ ${m.data.q}</strong>
-                            ${m.data.opts.map(o => `<span class="quiz-opt" onclick="checkMCQ(this, '${o}', '${m.data.ans}')">${o}</span>`).join('')}
-                        </div>`;
-                }
-                else if(m.type === 'tf') {
-                    content = `
-                        <div class="edu-widget">
-                            <strong>✅/❌ ${m.data.q}</strong>
-                            <span class="quiz-opt" onclick="checkMCQ(this, 'True', '${m.data.ans}')">True</span>
-                            <span class="quiz-opt" onclick="checkMCQ(this, 'False', '${m.data.ans}')">False</span>
-                        </div>`;
-                }
-                else if(m.type === 'fib') {
-                    content = `
-                        <div class="edu-widget">
-                            <strong>🖊 ${m.data.q}</strong>
-                            <input type="text" placeholder="بەرسڤ..." onblur="checkFIB(this, '${m.data.ans}')" style="background:#000; margin-top:5px;">
-                        </div>`;
-                }
-
-                container.innerHTML += `
-                    <div style="display:flex;">
-                        <div class="msg ${m.sender === currentUser.id ? 'msg-me' : 'msg-other'}">
-                            ${content}
-                        </div>
-                    </div>`;
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function checkMCQ(el, selected, correct) {
-            if(selected === correct) el.classList.add('quiz-correct');
-            else el.classList.add('quiz-wrong');
-        }
-        function checkFIB(input, correct) {
-            if(input.value.trim().toLowerCase() === correct.toLowerCase()) { input.style.borderColor = "#28a745"; input.style.color = "#28a745"; }
-            else { input.style.borderColor = "#dc3545"; input.style.color = "#dc3545"; }
-        }
-
-        function sendText() {
-            const txt = document.getElementById('msg-in').value;
-            if(txt && activeChatID) { pushMsg({ sender: currentUser.id, type: 'text', text: txt }); document.getElementById('msg-in').value = ''; }
-        }
-
-        function toggleTools() { const m = document.getElementById('tools-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
-        
-        function sendTool(type) {
-            toggleTools();
-            if(type === 'photo') document.getElementById('chat-file-input').click();
-            else if(type === 'poll') { const q = prompt("پرسیار:"); if(q) pushMsg({ sender: currentUser.id, type: 'poll', data: {q} }); }
-            else if(type === 'mcq') { const q = prompt("پرسیار:"); const o1 = prompt("هەلبژاردە 1:"); const o2 = prompt("هەلبژاردە 2:"); const ans = prompt("کیژە یا راستە؟"); if(q&&o1) pushMsg({ sender: currentUser.id, type: 'mcq', data: {q, opts:[o1,o2], ans} }); }
-            else if(type === 'tf') { const q = prompt("پرسیار:"); const ans = prompt("بەرسڤ (True/False):"); if(q) pushMsg({ sender: currentUser.id, type: 'tf', data: {q, ans} }); }
-            else if(type === 'fib') { const q = prompt("پرسیار:"); const ans = prompt("بەرسڤ:"); if(q) pushMsg({ sender: currentUser.id, type: 'fib', data: {q, ans} }); }
-        }
-
-        function processFileSend() {
-            const file = document.getElementById('chat-file-input').files[0];
-            const reader = new FileReader();
-            reader.onload = e => pushMsg({ sender: currentUser.id, type: 'photo', text: e.target.result });
-            if(file) reader.readAsDataURL(file);
-        }
-
-        function pushMsg(msgObj) {
-            if(!chats[activeChatID]) chats[activeChatID] = [];
-            chats[activeChatID].push(msgObj);
-            saveData(); renderMessages();
-        }
-
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
 </body>
 </html>
