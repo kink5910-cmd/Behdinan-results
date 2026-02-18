@@ -385,73 +385,78 @@
 
     <script>
         // --- DATABASE: 59 Students ---
-        // f: Fundamental [Quiz_T, Quiz_P, Mid_T, Mid_P]
+        // Logic: 
+        // 1-3: Original Cards.
+        // 4: Manual (Iman Mahmood).
+        // 5-59: Card N-1 (Shifted).
+        // f: [Quiz_T(5), Quiz_P(5), Mid_T(12), Mid_P(13)]
         // k: Kurdology (25)
-        // a: Anatomy (Practical / 15)
-        
+        // a: [Mid_P(15), Mid_T(10)]
+        // e: English Midterm (25) - NEW
+
         const db = [
-            { u: "benu2501", p: "nNGPT9UK", n: "Isra Salim", f: [5, 3, 10, 11.5], k: 25, a: 14 },
-            { u: "benu2502", p: "6UMfurep", n: "Ayad Hussien", f: [0, 2, 2.5, 9], k: 15, a: 8 },
-            { u: "benu2503", p: "bJbht2zx", n: "Iman Salim", f: [2, 4, 7.5, 8], k: 13, a: 12 },
+            { u: "benu2501", p: "nNGPT9UK", n: "Isra Salim", f: [5, 3, 10, 11.5], k: 25, a: [14, 10], e: 25 },
+            { u: "benu2502", p: "6UMfurep", n: "Ayad Hussien", f: [0, 2, 2.5, 9], k: 15, a: [8, 5], e: 10 },
+            { u: "benu2503", p: "bJbht2zx", n: "Iman Salim", f: [2, 4, 7.5, 8], k: 13, a: [12, 9], e: 20 },
             // SPECIAL CASE: Iman Mahmood (Row 4)
-            { u: "benu2559", p: "TJVF7UEr", n: "Iman Mahmood", f: [2, 4, 9.5, 10], k: 15, a: 10 },
+            { u: "benu2559", p: "TJVF7UEr", n: "Iman Mahmood", f: [2, 4, 9.5, 10], k: 15, a: [10, 9.5], e: 18 },
             
-            // Shifted Sequence
-            { u: "benu2504", p: "p6wDsuqm", n: "Aye Khalil", f: [3, 2, 8.5, 9.5], k: 21, a: 15 },
-            { u: "benu2505", p: "TW766w8H", n: "Ayad Ali", f: [0, 3, 5, 5], k: 7, a: 3.5 },
-            { u: "benu2506", p: "3eKBDfjP", n: "Iman Ramadan", f: [4, 4, 8.5, 12.5], k: 23, a: 14 },
-            { u: "benu2507", p: "vvGBa5qb", n: "Bina Saeed", f: [0, 3, 7.5, 6], k: 22, a: 5 },
-            { u: "benu2508", p: "cPB4w8s4", n: "Parween Mohammed", f: [0, 0, 0, 0], k: 0, a: 0 },
-            { u: "benu2509", p: "bLxPg8Nh", n: "Jowan Khalid", f: [0, 3, 5, 8.5], k: 14, a: 4 },
-            { u: "benu2510", p: "s6L8mqZL", n: "Cheeman Mohammed", f: [2, 3, 3.5, 9], k: 22, a: 13 },
-            { u: "benu2511", p: "uxRjf8fQ", n: "Halima Salah", f: [0, 2, 8.5, 6], k: 18, a: 15 },
-            { u: "benu2512", p: "eXtm7Ewy", n: "Doaa Issa", f: [0, 2, 7.5, 9], k: 15, a: 14 },
-            { u: "benu2513", p: "72LmZyC4", n: "Dilbreen Fars", f: [5, 2, 8, 11], k: 19, a: 13 },
-            { u: "benu2514", p: "afdKS8re", n: "Dilgash Samir", f: [5, 5, 10.5, 11.5], k: 25, a: 15 },
-            { u: "benu2515", p: "75F94tDq", n: "Doaa Walid", f: [0, 2, 7.5, 8.5], k: 16, a: 13 },
-            { u: "benu2516", p: "4MSsvCCL", n: "Ramziya Ali", f: [2, 3, 7.5, 8], k: 22, a: 14 },
-            { u: "benu2517", p: "YFUA3a8q", n: "Randa Dlo", f: [2, 2, 7.5, 11], k: 21, a: 13 },
-            { u: "benu2518", p: "N9HMfrsp", n: "Rahand Nazi", f: [0, 3, 7, 9.5], k: 21, a: 9.5 },
-            { u: "benu2519", p: "pfm3apFs", n: "Zina Shabaan", f: [0, 2, 8, 6.5], k: 17, a: 14 },
-            { u: "benu2520", p: "rRC5vVBR", n: "Zaynab Hikmat", f: [0, 3, 6.5, 9.5], k: 14, a: 7 },
-            { u: "benu2521", p: "SavL9FEH", n: "Zaynab Emad", f: [0, 2, 4.5, 4.5], k: 9, a: 9.5 },
-            { u: "benu2522", p: "jHNWa2cD", n: "Jiyan Shaaban", f: [3, 4, 5, 9], k: 16, a: 13.5 },
-            { u: "benu2523", p: "frjdy2QG", n: "Jina Hajji", f: [0, 4, 6.5, 8], k: 13, a: 8.5 },
-            { u: "benu2524", p: "cXPMdxd4", n: "Sara Moslih", f: [0, 0, 0, 0], k: 0, a: 0 },
-            { u: "benu2525", p: "xXPDWTE4", n: "Salar Sagvan", f: [0, 2, 3, 6.5], k: 15, a: 6 },
-            { u: "benu2526", p: "YusxbH6S", n: "Saman Islam", f: [0, 0, 7.5, 7], k: 15, a: 7 },
-            { u: "benu2527", p: "mp7WXkLY", n: "Sami Khalaf", f: [2, 2, 9, 9.5], k: 23, a: 13.5 },
-            { u: "benu2528", p: "Jzxrk3fh", n: "Saad Ahmed", f: [0, 1, 5.5, 7], k: 8, a: 8.5 },
-            { u: "benu2529", p: "Cfbye2NS", n: "Salim Marwan", f: [2, 4, 4, 8], k: 14, a: 6.5 },
-            { u: "benu2530", p: "kedm7gKz", n: "Samiya Morad", f: [0, 4, 7.5, 8], k: 23, a: 15 },
-            { u: "benu2531", p: "cNyYD42M", n: "Sipal Dawd", f: [0, 0, 0, 0], k: 0, a: 0 },
-            { u: "benu2532", p: "V3psDhs4", n: "Sidra Mohammed", f: [3, 2, 5.5, 8], k: 25, a: 15 },
-            { u: "benu2533", p: "cKP6HAtt", n: "Sidra Younis", f: [3, 2, 5, 10], k: 16, a: 12 },
-            { u: "benu2534", p: "R7yPad4V", n: "Shanaz Mohammed", f: [0, 3, 6.5, 6.5], k: 13, a: 2.5 },
-            { u: "benu2535", p: "MqZM9VRc", n: "Shani Khalaf", f: [0, 2, 5.5, 8.5], k: 19, a: 9 },
-            { u: "benu2536", p: "G3CuTUnr", n: "Shireen Darwish", f: [0, 0, 0, 6], k: 0, a: 1 },
-            { u: "benu2537", p: "tHuSqyb9", n: "Ali Hussien", f: [0, 3, 4, 6], k: 12, a: 12 },
-            { u: "benu2538", p: "38TWj7n6", n: "Mokhtar Hussien", f: [0, 0, 0, 0], k: 0, a: 0 },
-            { u: "benu2539", p: "Azsvst5j", n: "Maram Zidan", f: [2, 0, 0, 0], k: 9, a: 13.5 },
-            { u: "benu2540", p: "LrJx7Gak", n: "Mahnaz Idress", f: [0, 2, 7, 7], k: 19, a: 15 },
-            { u: "benu2541", p: "UuV8bWpd", n: "Mona Ayoub", f: [2, 4, 8.5, 11], k: 25, a: 15 },
-            { u: "benu2542", p: "q6v4cLrj", n: "Mideya Zaki", f: [2, 2, 8, 11], k: 15, a: 13.5 },
-            { u: "benu2543", p: "R7we5kze", n: "Mina Qassim", f: [4, 3, 4.5, 9], k: 23, a: 15 },
-            { u: "benu2544", p: "P3E5Aewh", n: "Nasir Khazir", f: [0, 2, 1.5, 4.5], k: 16, a: 0 },
-            { u: "benu2545", p: "G99q67ZU", n: "Nada Yousif", f: [0, 1, 7, 9], k: 21, a: 15 },
-            { u: "benu2546", p: "VLgBV8y2", n: "Najbeer Masood", f: [0, 0, 0, 0], k: 0, a: 0 },
-            { u: "benu2547", p: "x2JZT68z", n: "Haroon Rashid", f: [1, 3, 4.5, 5.5], k: 11, a: 11.5 },
-            { u: "benu2548", p: "grM4hQqj", n: "Hays Farhan", f: [0, 4, 9, 10], k: 17, a: 15 },
-            { u: "benu2549", p: "ycGfBu55", n: "Hezhin Sharif", f: [0, 3, 6, 8], k: 13, a: 4.5 },
-            { u: "benu2550", p: "8tghU622", n: "Hadar Zbir", f: [5, 2, 9, 11], k: 20, a: 14 },
-            { u: "benu2551", p: "WUN5zzSh", n: "Waad Shakir", f: [0, 2, 0, 0], k: 6, a: 0 },
-            { u: "benu2552", p: "AnxcU7rn", n: "Walaa Ahmed", f: [5, 3, 11, 8], k: 25, a: 15 },
-            { u: "benu2553", p: "kfzJwH8A", n: "Yasir Khorshid", f: [5, 3, 10, 9.5], k: 22, a: 15 },
-            { u: "benu2554", p: "5bE2jLHH", n: "Yousra Mohammed", f: [0, 3, 5, 10.5], k: 25, a: 14 },
-            { u: "benu2555", p: "U7UJpq8J", n: "Aram Mahmood", f: [0, 0, 0, 5], k: 12, a: 2 },
-            { u: "benu2556", p: "hJ9Ehur5", n: "Tafin Nazir", f: [2, 3, 6.5, 7.5], k: 22, a: 8.5 },
-            { u: "benu2557", p: "GWsRcmA7", n: "Aveen Shawkat", f: [0, 0, 0, 0], k: 0, a: 0 },
-            { u: "benu2558", p: "YArtcNE3", n: "Elaf Mikaeel", f: [0, 0, 5.5, 7], k: 8, a: 7 }
+            // Shifted Sequence starts here (Row 5 uses Card 4)
+            { u: "benu2504", p: "p6wDsuqm", n: "Aye Khalil", f: [3, 2, 8.5, 9.5], k: 21, a: [15, 9.5], e: 24 },
+            { u: "benu2505", p: "TW766w8H", n: "Ayad Ali", f: [0, 3, 5, 5], k: 7, a: [3.5, 3], e: 11 }, // Adjusted based on image for Ayad Ali practical
+            { u: "benu2506", p: "3eKBDfjP", n: "Iman Ramadan", f: [4, 4, 8.5, 12.5], k: 23, a: [14, 8.5], e: 23 },
+            { u: "benu2507", p: "vvGBa5qb", n: "Bina Saeed", f: [0, 3, 7.5, 6], k: 22, a: [5, 9], e: 8 }, // Adjusted based on image for Bina Saeed practical 
+            { u: "benu2508", p: "cPB4w8s4", n: "Parween Mohammed", f: [0, 0, 0, 0], k: 0, a: [0, 0], e: 0 },
+            { u: "benu2509", p: "bLxPg8Nh", n: "Jowan Khalid", f: [0, 3, 5, 8.5], k: 14, a: [4, 1.5], e: 16 },
+            { u: "benu2510", p: "s6L8mqZL", n: "Cheeman Mohammed", f: [2, 3, 3.5, 9], k: 22, a: [13, 7], e: 15 },
+            { u: "benu2511", p: "uxRjf8fQ", n: "Halima Salah", f: [0, 2, 8.5, 6], k: 18, a: [15, 7.5], e: 18 },
+            { u: "benu2512", p: "eXtm7Ewy", n: "Doaa Issa", f: [0, 2, 7.5, 9], k: 15, a: [14, 5.5], e: 12 },
+            { u: "benu2513", p: "72LmZyC4", n: "Dilbreen Fars", f: [5, 2, 8, 11], k: 19, a: [13, 9], e: 20 },
+            { u: "benu2514", p: "afdKS8re", n: "Dilgash Samir", f: [5, 5, 10.5, 11.5], k: 25, a: [15, 10], e: 23 },
+            { u: "benu2515", p: "75F94tDq", n: "Doaa Walid", f: [0, 2, 7.5, 8.5], k: 16, a: [13, 6], e: 17 },
+            { u: "benu2516", p: "4MSsvCCL", n: "Ramziya Ali", f: [2, 3, 7.5, 8], k: 22, a: [14, 8.5], e: 20 }, // Adjusted based on image for Ramziya Ali practical
+            { u: "benu2517", p: "YFUA3a8q", n: "Randa Dlo", f: [2, 2, 7.5, 11], k: 21, a: [13, 10], e: 23 },
+            { u: "benu2518", p: "N9HMfrsp", n: "Rahand Nazi", f: [0, 3, 7, 9.5], k: 21, a: [9.5, 6.5], e: 14 },
+            { u: "benu2519", p: "pfm3apFs", n: "Zina Shabaan", f: [0, 2, 8, 6.5], k: 17, a: [14, 6.5], e: 20 },
+            { u: "benu2520", p: "rRC5vVBR", n: "Zaynab Hikmat", f: [0, 3, 6.5, 9.5], k: 14, a: [7, 8.5], e: 18 },
+            { u: "benu2521", p: "SavL9FEH", n: "Zaynab Emad", f: [0, 2, 4.5, 4.5], k: 9, a: [9.5, 4], e: 12 }, // Adjusted based on image for Zaynab Emad practical
+            { u: "benu2522", p: "jHNWa2cD", n: "Jiyan Shaaban", f: [3, 4, 5, 9], k: 16, a: [13.5, 8.0], e: 17 },
+            { u: "benu2523", p: "frjdy2QG", n: "Jina Hajji", f: [0, 4, 6.5, 8], k: 13, a: [8.5, 7], e: 15 },
+            { u: "benu2524", p: "cXPMdxd4", n: "Sara Moslih", f: [0, 0, 0, 0], k: 0, a: [0, 0], e: 0 },
+            { u: "benu2525", p: "xXPDWTE4", n: "Salar Sagvan", f: [0, 2, 3, 6.5], k: 15, a: [6, 7], e: 10 },
+            { u: "benu2526", p: "YusxbH6S", n: "Saman Islam", f: [0, 0, 7.5, 7], k: 15, a: [7, 7.5], e: 9 },
+            { u: "benu2527", p: "mp7WXkLY", n: "Sami Khalaf", f: [2, 2, 9, 9.5], k: 23, a: [13.5, 9], e: 24 },
+            { u: "benu2528", p: "Jzxrk3fh", n: "Saad Ahmed", f: [0, 1, 5.5, 7], k: 8, a: [8.5, 6.5], e: 24 },
+            { u: "benu2529", p: "Cfbye2NS", n: "Salim Marwan", f: [2, 4, 4, 8], k: 14, a: [6.5, 4], e: 13 },
+            { u: "benu2530", p: "kedm7gKz", n: "Samiya Morad", f: [0, 4, 7.5, 8], k: 23, a: [15, 9.5], e: 19 },
+            { u: "benu2531", p: "cNyYD42M", n: "Sipal Dawd", f: [0, 0, 0, 0], k: 0, a: [0, 0], e: 0 },
+            { u: "benu2532", p: "V3psDhs4", n: "Sidra Mohammed", f: [3, 2, 5.5, 8], k: 25, a: [15, 10], e: 19 },
+            { u: "benu2533", p: "cKP6HAtt", n: "Sidra Younis", f: [3, 2, 5, 10], k: 16, a: [12, 8.5], e: 19 },
+            { u: "benu2534", p: "R7yPad4V", n: "Shanaz Mohammed", f: [0, 3, 6.5, 6.5], k: 13, a: [2.5, 4], e: 12 },
+            { u: "benu2535", p: "MqZM9VRc", n: "Shani Khalaf", f: [0, 2, 5.5, 8.5], k: 19, a: [9, 5.5], e: 5 },
+            { u: "benu2536", p: "G3CuTUnr", n: "Shireen Darwish", f: [0, 0, 0, 6], k: 0, a: [1, 0], e: 0 }, // Adjusted based on image for Shireen Darwish practical and theory
+            { u: "benu2537", p: "tHuSqyb9", n: "Ali Hussien", f: [0, 3, 4, 6], k: 12, a: [12, 9.5], e: 19 },
+            { u: "benu2538", p: "38TWj7n6", n: "Mokhtar Hussien", f: [0, 0, 0, 0], k: 0, a: [0, 0], e: 0 },
+            { u: "benu2539", p: "Azsvst5j", n: "Maram Zidan", f: [2, 0, 0, 0], k: 9, a: [0, 5], e: 23 },
+            { u: "benu2540", p: "LrJx7Gak", n: "Mahnaz Idress", f: [0, 2, 7, 7], k: 19, a: [15, 10], e: 20 },
+            { u: "benu2541", p: "UuV8bWpd", n: "Mona Ayoub", f: [2, 4, 8.5, 11], k: 25, a: [15, 10], e: 17 },
+            { u: "benu2542", p: "q6v4cLrj", n: "Mideya Zaki", f: [2, 2, 8, 11], k: 15, a: [13.5, 9], e: 13 },
+            { u: "benu2543", p: "R7we5kze", n: "Mina Qassim", f: [4, 3, 4.5, 9], k: 23, a: [15, 9], e: 17 },
+            { u: "benu2544", p: "P3E5Aewh", n: "Nasir Khazir", f: [0, 2, 1.5, 4.5], k: 16, a: [0, 0], e: 4 }, // Adjusted based on image for Nasir Khazir practical and theory
+            { u: "benu2545", p: "G99q67ZU", n: "Nada Yousif", f: [0, 1, 7, 9], k: 21, a: [15, 7], e: 11 },
+            { u: "benu2546", p: "VLgBV8y2", n: "Najbeer Masood", f: [0, 0, 0, 0], k: 0, a: [0, 0], e: 0 },
+            { u: "benu2547", p: "x2JZT68z", n: "Haroon Rashid", f: [1, 3, 4.5, 5.5], k: 11, a: [11.5, 3.5], e: 14 },
+            { u: "benu2548", p: "grM4hQqj", n: "Hays Farhan", f: [0, 4, 9, 10], k: 17, a: [15, 8], e: 14 },
+            { u: "benu2549", p: "ycGfBu55", n: "Hezhin Sharif", f: [0, 3, 6, 8], k: 13, a: [4.5, 9], e: 15 },
+            { u: "benu2550", p: "8tghU622", n: "Hadar Zbir", f: [5, 2, 9, 11], k: 20, a: [14, 9], e: 12 },
+            { u: "benu2551", p: "WUN5zzSh", n: "Waad Shakir", f: [0, 2, 0, 0], k: 6, a: [0, 0], e: 0 }, // Adjusted based on image for Waad Shakir practical and theory
+            { u: "benu2552", p: "AnxcU7rn", n: "Walaa Ahmed", f: [5, 3, 11, 8], k: 25, a: [15, 10], e: 22 },
+            { u: "benu2553", p: "kfzJwH8A", n: "Yasir Khorshid", f: [5, 3, 10, 9.5], k: 22, a: [15, 9], e: 19 },
+            { u: "benu2554", p: "5bE2jLHH", n: "Yousra Mohammed", f: [0, 3, 5, 10.5], k: 25, a: [14, 10], e: 24 },
+            { u: "benu2555", p: "U7UJpq8J", n: "Aram Mahmood", f: [0, 0, 0, 5], k: 12, a: [2, 3], e: 13 }, // Adjusted based on image for Aram Mahmood practical
+            { u: "benu2556", p: "hJ9Ehur5", n: "Hafin Nazir", f: [2, 3, 6.5, 7.5], k: 22, a: [8.5, 7], e: 18 },
+            { u: "benu2557", p: "GWsRcmA7", n: "Aveen Shawkat", f: [0, 0, 0, 0], k: 0, a: [0, 0], e: 0 },
+            { u: "benu2558", p: "YArtcNE3", n: "Elaf Mikaeel", f: [0, 0, 5.5, 7], k: 8, a: [7, 4], e: 15 }
         ];
 
         let currentUser = null;
@@ -467,7 +472,7 @@
             const found = db.find(s => s.u === user && s.p === pass);
 
             if(found) {
-                currentUser = found;
+                currentUser = found; 
                 errorMsg.style.display = 'none';
                 
                 // Animation transition
@@ -543,23 +548,57 @@
                 title.innerText = "Kurdology Results";
                 content.innerHTML = `
                     <div style="text-align:center; padding:20px;">
-                        <p style="color:#666; margin-bottom:10px;">Midterm Exam</p>
+                        <p style="color:#666; margin-bottom:10px;">Course Mark</p>
                         <div style="font-size:3.5rem; font-weight:bold; color:var(--primary);">${currentUser.k} <span style="font-size:1rem; color:#999;">/ 25</span></div>
                     </div>
                 `;
             } else if (subject === 'anatomy') {
                 title.innerText = "Human Anatomy Results";
-                content.innerHTML = `
+                const g = currentUser.a;
+                const total = g[0] + g[1];
+
+                let html = `
+                    <table class="grade-table">
+                        <tr>
+                            <th>Exam / Activity</th>
+                            <th>Full Mark</th>
+                            <th>Your Score</th>
+                        </tr>
+                        <tr>
+                            <td>Midterm (Practical)</td>
+                            <td>15%</td>
+                            <td class="score-val">${g[0]}</td>
+                        </tr>
+                        <tr>
+                            <td>Midterm (Theory)</td>
+                            <td>10%</td>
+                            <td class="score-val">${g[1]}</td>
+                        </tr>
+                        <tr style="background:#f0f8ff;">
+                            <td><strong>Total Collected</strong></td>
+                            <td><strong>25%</strong></td>
+                            <td class="score-val" style="color:#1e3c72; font-size:1.1rem;">${total}</td>
+                        </tr>
+                    </table>
+                `;
+                content.innerHTML = html;
+            } else if (subject === 'english') { // NEW: English Language Grades
+                title.innerText = "English Language Results";
+                const g = currentUser.e; // Assuming 'e' for English Midterm
+                
+                let html = `
                     <div style="text-align:center; padding:20px;">
-                        <p style="color:#666; margin-bottom:10px;">Practical Exam</p>
-                        <div style="font-size:3.5rem; font-weight:bold; color:var(--primary);">${currentUser.a} <span style="font-size:1rem; color:#999;">/ 15</span></div>
+                        <p style="color:#666; margin-bottom:10px;">Midterm Exam</p>
+                        <div style="font-size:3.5rem; font-weight:bold; color:var(--primary);">${g} <span style="font-size:1rem; color:#999;">/ 25</span></div>
                     </div>
                 `;
+                content.innerHTML = html;
+
             } else {
-                // Empty for others
+                // Empty for others (like computer skills if no grades are added)
                 let subName = "";
                 if(subject === 'computer') subName = "Computer Skills";
-                if(subject === 'english') subName = "English Language";
+                // if(subject === 'english') subName = "English Language"; // This case is now handled above
 
                 title.innerText = subName;
                 content.innerHTML = `
